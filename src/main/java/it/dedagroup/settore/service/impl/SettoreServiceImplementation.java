@@ -124,27 +124,19 @@ public class SettoreServiceImplementation implements SettoreServiceDefinition {
 	@Override
     @Transactional(rollbackOn = Exception.class)
     public Settore saveSettore(Settore settore){
-		try {
-			settoreRepository.save(settore);
-			return settore;
-		}catch (OptimisticLockingFailureException e){
-			throw new OptimisticLockingFailureException("Questo oggetto è stato modificato");
-		}
+		return settoreRepository.save(settore);
     }
 
 	@Override
 	@Transactional(rollbackOn = Exception.class)
 	public Settore updateSettore(Settore settore) {
 		try {
-			if (settoreRepository.findById(settore.getId()).isPresent()) {
-				Settore s = settoreRepository.findById(settore.getId()).get();
-				s.setNome(settore.getNome());
-				s.setCapienza(settore.getCapienza());
-				s.setIdLuogo(settore.getIdLuogo());
-				s.setCancellato(settore.isCancellato());
-				return settoreRepository.save(s);
-			}
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nessun settore trovato con ID: " + settore.getId());
+			Settore s = findById(settore.getId());
+			s.setNome(settore.getNome());
+			s.setCapienza(settore.getCapienza());
+			s.setIdLuogo(settore.getIdLuogo());
+			s.setCancellato(settore.isCancellato());
+			return settoreRepository.save(s);
 		}catch (OptimisticLockingFailureException e){
 			throw new OptimisticLockingFailureException("Questo oggetto è stato modificato");
 		}

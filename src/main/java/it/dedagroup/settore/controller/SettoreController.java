@@ -39,25 +39,29 @@ public class SettoreController {
 	 *                che contiene i dati necessari alla creazione dell'oggetto {@link Settore}.
 	 * @return {@link Settore} Ritorna un oggetto DTO con all'interno tutti i dati del settore necessari.
 	 */
-
     @PostMapping("/aggiungiSettore")
     public ResponseEntity<Settore> aggiungiSettore(@Valid @RequestBody SettoreRequest request){
         Settore newSettore = settoreService.saveSettore(settoreMapper.toSettoreFromRequest(request));
         return ResponseEntity.ok().body(newSettore);
     }
-    
+
+	public ResponseEntity<Settore> updateSettore(@Valid @RequestBody SettoreRequest request){
+		Settore newSettore = settoreService.updateSettore(settoreMapper.toSettoreFromRequest(request));
+		return ResponseEntity.ok().body(newSettore);
+	}
+
 
     @GetMapping("/findById")
-    public ResponseEntity<Settore> findById(@Positive(message = "Il campo ID deve essere un numero positivo")
+    public ResponseEntity<Settore> findById(@Valid @Positive(message = "Il campo ID deve essere un numero positivo")
 												@RequestParam("id") long id ){
         Settore s = settoreService.findById(id);
         return ResponseEntity.ok().body(s);
     }
-    
+
 
 
     @GetMapping("/findByIdEsistenti")
-    public ResponseEntity<Settore> findByIdAndIsCancellatoFalse(@Positive(message = "Il campo ID deve essere un numero positivo")
+    public ResponseEntity<Settore> findByIdAndIsCancellatoFalse(@Valid @Positive(message = "Il campo ID deve essere un numero positivo")
 																	@RequestParam("id") long id ){
         Settore s = settoreService.findByIdAndIsCancellatoFalse(id);
         return ResponseEntity.ok().body(s);
@@ -73,7 +77,7 @@ public class SettoreController {
     
 	 
 	@GetMapping("/allByPosti/{posti}")
-	public ResponseEntity<List<Settore>> findAllByPosti(@Positive(message = "Il campo posti deve essere un numero positivo")
+	public ResponseEntity<List<Settore>> findAllByPosti(@Valid @Positive(message = "Il campo posti deve essere un numero positivo")
 															@PathVariable("posti") int posti){
 		List<Settore> settori = settoreService.findAllByCapienza(posti);
 		return ResponseEntity.ok(settori);
@@ -81,7 +85,7 @@ public class SettoreController {
     
 
 	@GetMapping("/allByNome/{nome}")
-	public ResponseEntity<List<Settore>> findAllByNomeAndIsCancellatoFalse(@NotBlank(message = "Il campo nome non può essere lasciato vuoto")
+	public ResponseEntity<List<Settore>> findAllByNomeAndIsCancellatoFalse(@Valid @NotBlank(message = "Il campo nome non può essere lasciato vuoto")
 																			   @PathVariable("nome") String nome){
 		List<Settore> settori = settoreService.findAllByNomeAndIsCancellatoFalse(nome);
 		return ResponseEntity.ok(settori);
@@ -89,7 +93,7 @@ public class SettoreController {
     
 	
 	 @PutMapping("/deleteSettore/{id}")
-	public ResponseEntity<String> deleteSettore(@Positive(message = "Il campo ID deve essere un numero positivo")
+	public ResponseEntity<String> deleteSettore(@Valid @Positive(message = "Il campo ID deve essere un numero positivo")
 													@PathVariable("id") long id){
 		settoreService.deleteSettore(id);
 		return ResponseEntity.ok("Settore eliminato");
@@ -97,7 +101,7 @@ public class SettoreController {
 
     
 	@GetMapping("/findByIdLuogo")
-	public ResponseEntity<List<Settore>> findByIdLuogo(@Positive(message = "Il campo ID deve essere un numero positivo")
+	public ResponseEntity<List<Settore>> findByIdLuogo(@Valid @Positive(message = "Il campo ID deve essere un numero positivo")
 														   @RequestParam("idLuogo") long idLuogo){
 		return ResponseEntity.ok().body(settoreService.findAllByIdLuogo(idLuogo));
 	}
@@ -110,7 +114,7 @@ public class SettoreController {
 	 
 	 
 	 @PostMapping("/findAllByListIdLuogo")
-		public ResponseEntity<List<Settore>> findAllByListIdLuogo(@RequestBody List<Long> idLuogo){
+		public ResponseEntity<List<Settore>> findAllByListIdLuogo(@Valid @RequestBody List<Long> idLuogo){
 			return ResponseEntity.ok(settoreService.findAllByListIdLuogo(idLuogo));
 		}
 }
